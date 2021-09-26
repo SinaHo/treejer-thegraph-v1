@@ -86,7 +86,7 @@ export function handleTreejerDevelopBalanceWithdrawn(event: TreejerDevelopBalanc
 
 
 export function handleTreeFunded(event: TreeFunded): void {
-    let fmc = FMcontract.bind(Address.fromString('0xd5784E9F70D4C81B800491B799f6c33AF984caD7'));
+    let fmc = FMcontract.bind(Address.fromString('0xF8577B3782488E2fA456bc7e6624704388C1230b'));
     let modelId = fmc.getFindDistributionModelId(event.params.treeId);
     let treeFunds = new TreeFund(getCount_treeFund(COUNTER_ID).toHexString());
     treeFunds.tree = event.params.treeId.toHexString();
