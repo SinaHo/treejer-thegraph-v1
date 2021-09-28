@@ -34,12 +34,13 @@ function newCounter(id: string): Counter {
     counter.updateSpec = _zero;
     counter.bid = _zero;
     counter.RegularRequest = _zero;
+    counter.IncrementalRequest = _zero;
     counter.treeFund = _zero;
     counter.dme = _zero;
     counter.withdraws = _zero;
     counter.planterPayments = _zero;
     counter.assignedFunds = _zero;
-
+    counter.activity=_zero;
     counter.treeSpecs = _zero;
     counter.communityGift = _zero;
     return counter;
@@ -54,6 +55,19 @@ export function getCount_updateSpec(id: string): BigInt {
     }
     counter = newCounter(id);
     counter.updateSpec = BigInt.fromI32(1);
+    counter.save();
+    return BigInt.fromI32(0);
+}
+export function getCount_activity(id: string): BigInt {
+    let counter = Counter.load(id);
+    if (counter) {
+        let cnt: BigInt = counter.activity as BigInt;
+        counter.activity = cnt.plus(BigInt.fromI32(1));
+        counter.save();
+        return cnt;
+    }
+    counter = newCounter(id);
+    counter.activity = BigInt.fromI32(1);
     counter.save();
     return BigInt.fromI32(0);
 }
@@ -82,6 +96,19 @@ export function getCount_RegularRequest(id: string): BigInt {
     }
     counter = newCounter(id);
     counter.RegularRequest = BigInt.fromI32(1);
+    counter.save();
+    return BigInt.fromI32(0);
+}
+export function getCount_IncrementalRequest(id: string): BigInt {
+    let counter = Counter.load(id);
+    if (counter) {
+        let cnt: BigInt = counter.IncrementalRequest as BigInt;
+        counter.IncrementalRequest = cnt.plus(BigInt.fromI32(1));
+        counter.save();
+        return cnt;
+    }
+    counter = newCounter(id);
+    counter.IncrementalRequest = BigInt.fromI32(1);
     counter.save();
     return BigInt.fromI32(0);
 }
@@ -184,6 +211,8 @@ export function getGlobalData(): GlobalData | null {
         gb.nextIncremetalPrice = new BigInt(0);
         gb.communityGiftPlanterFund = new BigInt(0);
         gb.communityGiftReferralFund = new BigInt(0);
+        gb.totalRegularRequests= new BigInt(0);
+        gb.totalIncrementalRequests= new BigInt(0);
     }
     return gb;
 

@@ -79,6 +79,8 @@ dataSources:
           handler: handleTreeAdded
         - event: TreeAssigned(uint256)
           handler: handleTreeAssigned
+        - event: bulkReverted(uint256,uint256)
+          handler: handlebulkReverted  
       file: ./src/mappings/TreeFactory.ts
 
   - kind: ethereum/contract
@@ -104,9 +106,9 @@ dataSources:
       eventHandlers:
         - event: AuctionCreated(uint256)
           handler: handleAuctionCreated
-        - event: HighestBidIncreased(uint256,uint256,address,uint256)
+        - event: HighestBidIncreased(uint256,uint256,address,uint256,address)
           handler: handleHighestBidIncreased
-        - event: AuctionSettled(uint256,uint256,address,uint256)
+        - event: AuctionSettled(uint256,uint256,address,uint256,address)
           handler: handleAuctionSettled
         - event: AuctionEnded(uint256,uint256)
           handler: handleAuctionEnded
@@ -161,7 +163,9 @@ dataSources:
       eventHandlers:
         - event: IncrementalSellUpdated()
           handler: handleIncrementalSellUpdated
-        - event: IncrementalTreeSold(uint256,address,uint256)
+        - event: IncrementalRatesUpdated()
+          handler: handleIncrementalRatesUpdated
+        - event: IncrementalTreeSold(address,address,uint256,uint256,uint256)
           handler: handleIncrementalTreeSold
       file: ./src/mappings/IncrementalSell.ts
 
@@ -184,14 +188,20 @@ dataSources:
         - name: RegularSell
           file: ./abis/RegularSell.json
       eventHandlers:
-        - event: RegularTreeRequsted(uint256,address,uint256)
+        - event: RegularTreeRequsted(address,address,uint256,uint256)
           handler: handleRegularTreeRequsted
-        - event: RegularMint(address,uint256)
+        - event: RegularMint(address,uint256,uint256)
           handler: handleRegularMint
-        - event: RegularTreeRequstedById(uint256,address,uint256)
+        - event: RegularTreeRequstedById(address,address,uint256,uint256)
           handler: handleRegularTreeRequstedById
         - event: TreePriceUpdated(uint256)
           handler: handleTreePriceUpdated
+        - event: GiftPerRegularBuyUpdated(uint256)
+          handler: handleGiftPerRegularBuyUpdated
+        - event: ReferrGiftClaimed(address,uint256,uint256)
+          handler: handleReferrGiftClaimed
+        - event: RegularPlanterFundSet(uint256,uint256)
+          handler: handleRegularPlanterFundSet
       file: ./src/mappings/RegularSell.ts
   - kind: ethereum/contract
     name: FinancialModel
