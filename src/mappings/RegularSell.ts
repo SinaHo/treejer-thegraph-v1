@@ -1,8 +1,8 @@
 
 import { RegularMint, RegularSell as RegularSellContract, RegularTreeRequsted, RegularTreeRequstedById, TreePriceUpdated } from "../../generated/RegularSell/RegularSell";
-import { BatchBuy,  Owner, Tree, Activity } from "../../generated/schema";
+import { BatchBuy,  Owner, Tree, Activity,Referrer } from "../../generated/schema";
 import { Address, BigInt, log } from '@graphprotocol/graph-ts';
-import { COUNTER_ID, getCount_BatchBuy, getCount_BatchBuy, getCount_updateSpec, getGlobalData, INCREMENTAL_SELL_ID, ZERO_ADDRESS } from '../helpers';
+import { COUNTER_ID, getCount_BatchBuy,  getCount_activity, getGlobalData, INCREMENTAL_SELL_ID, ZERO_ADDRESS } from '../helpers';
 
 
 
@@ -19,7 +19,7 @@ function newOwner(id: string): Owner {
     owner.incrementalSpent = BigInt.fromI32(0);
     return owner;   
 }
-function newReferrer(id: string): Owner {
+function newReferrer(id: string): Referrer {
     let referrer = new Referrer(id);
     referrer.referredRegular = BigInt.fromI32(0);
     referrer.regularUnused=BigInt.fromI32(0);
@@ -43,20 +43,22 @@ export function handleRegularTreeRequsted(event: RegularTreeRequsted): void {
     rr.referrer=referrerAddress.toHexString();
     rr.date = event.block.timestamp;
     rr.type="regular";
-    rr.save();
+
     if (referrerAddress!= ZERO_ADDRESS){
         if (referrerAddress!= ZERO_ADDRESS){
             let referrer: Referrer | null =Referrer.load(referrerAddress);
             if (!referrer) referrer=new Referrer(referrerAddress.toHexString());
-            referrer.referredRegular=referrer.referredIncremental.plus(count as BigInt);
-            referrer.genesisGifts=referrer.genesisGifts.plus(count as BigInt);
+            referrer.referredRegular=referrer.referredIncremental.plus(event.params.count as BigInt);
+            referrer.genesisGifts=referrer.genesisGifts.plus(event.params.count as BigInt);
             referrer.save();
-            isr.referrer=referrerAddress;
+            rr.referrer=referrerAddress;
         }
     }
+    rr.save();
+    let gb = getGlobalData();
     let owner: Owner | null = Owner.load(rr.owner);
     if (!owner) gb.ownerCount=gb.ownerCount.plus(BigInt.fromI32(1));
-    if (!owner) owner = newOwner(winner.toHexString());
+    if (!owner) owner = newOwner(event.params.buyer.toHexString());
     owner.regularSpent = owner.regularSpent.plus(event.params.amount as BigInt);
     owner.treeCount = owner.treeCount.plus(event.params.count as BigInt);
     owner.regularCount = owner.regularCount.plus(event.params.count as BigInt);
@@ -71,10 +73,8 @@ export function handleRegularTreeRequsted(event: RegularTreeRequsted): void {
     activity.activityReferenceId=rr.id;
     activity.eventDate=event.block.timestamp as BigInt;
     activity.save()
-    let gb = getGlobalData();
     gb.totalRegularTreeSellAmount = gb.totalRegularTreeSellAmount.plus(event.params.amount as BigInt);
     gb.totalRegularTreeSellCount = gb.totalRegularTreeSellCount.plus(event.params.count as BigInt);
-    if (flag) gb.ownerCount = gb.ownerCount.plus(BigInt.fromI32(1));
     gb.ownedTreeCount = gb.ownedTreeCount.plus(event.params.count as BigInt);
     gb.save();
 

@@ -52,7 +52,7 @@ export function handlePlanterJoin(event: PlanterJoin): void {
     planter.organizationRule = new BigInt(0);
     planter.refferedBy = planterContract.refferedBy(event.params.planterId).toHexString();
     planter.memberOf = planterContract.memberOf(event.params.planterId).toHexString();
-    let plc = PlanterFund.bind(Address.fromString("0xc2EFF2acc032974566583ac7e680545b0f3007fB"));
+    let plc = PlanterFund.bind(Address.fromString("0x7660aE0Ca1133ff2ff5CdD5Fa1C78d38E2ef07AA"));
     planter.balance = plc.balances(event.params.planterId) as BigInt;
     // log.info("Planter is {} {} {} {} {} {} {} {} ", [pl.value0.toString(), pl.value1.toString(), pl.value2.toString(), pl.value3.toString(), pl.value4.toString(), pl.value5.toString(), pl.value6.toString(), pl.value7.toString() ]);
     planter.save();
@@ -85,7 +85,7 @@ export function handleOrganizationJoin(event: OrganizationJoin): void {
     planter.organizationRule = new BigInt(0);
     planter.refferedBy = planterContract.refferedBy(event.params.organizationId).toHexString();
     planter.memberOf = planterContract.memberOf(event.params.organizationId).toHexString();
-    let plc = PlanterFund.bind(Address.fromString("0xc2EFF2acc032974566583ac7e680545b0f3007fB"));
+    let plc = PlanterFund.bind(Address.fromString("0x7660aE0Ca1133ff2ff5CdD5Fa1C78d38E2ef07AA"));
     planter.balance = plc.balances(event.params.organizationId) as BigInt;
     planter.save();
     if (planter.refferedBy != ZERO_ADDRESS) {

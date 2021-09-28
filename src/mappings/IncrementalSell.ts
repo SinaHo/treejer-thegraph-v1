@@ -111,7 +111,7 @@ export function handleIncrementalTreeSold(event: IncrementalTreeSold): void {
     isr.save();
     
     for (let i = parseInt(startId); i <= parseInt(startId.plus(count as BigInt)); i++) {
-        let tree = Tree.load(i.toHexString());
+        let tree = Tree.load(BigInt.fromString(i.toString().split(".")[0]).toHexString());
         tree.owner=buyer.toHexString();
         tree.requestId=isr.id;
         tree.mintStatus = BigInt.fromI32(1);
