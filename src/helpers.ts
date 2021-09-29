@@ -33,8 +33,7 @@ function newCounter(id: string): Counter {
     let _zero = BigInt.fromI32(0);
     counter.updateSpec = _zero;
     counter.bid = _zero;
-    counter.RegularRequest = _zero;
-    counter.IncrementalRequest = _zero;
+    counter.batchBuy = _zero;
     counter.treeFund = _zero;
     counter.dme = _zero;
     counter.withdraws = _zero;
@@ -86,32 +85,20 @@ export function getCount_bid(id: string): BigInt {
     return BigInt.fromI32(0);
 }
 
-export function getCount_RegularRequest(id: string): BigInt {
+export function getCount_BatchBuy(id: string): BigInt {
     let counter = Counter.load(id);
     if (counter) {
-        let cnt: BigInt = counter.RegularRequest as BigInt;
-        counter.RegularRequest = cnt.plus(BigInt.fromI32(1));
+        let cnt: BigInt = counter.batchBuy as BigInt;
+        counter.batchBuy = cnt.plus(BigInt.fromI32(1));
         counter.save();
         return cnt;
     }
     counter = newCounter(id);
-    counter.RegularRequest = BigInt.fromI32(1);
+    counter.batchBuy = BigInt.fromI32(1);
     counter.save();
     return BigInt.fromI32(0);
 }
-export function getCount_IncrementalRequest(id: string): BigInt {
-    let counter = Counter.load(id);
-    if (counter) {
-        let cnt: BigInt = counter.IncrementalRequest as BigInt;
-        counter.IncrementalRequest = cnt.plus(BigInt.fromI32(1));
-        counter.save();
-        return cnt;
-    }
-    counter = newCounter(id);
-    counter.IncrementalRequest = BigInt.fromI32(1);
-    counter.save();
-    return BigInt.fromI32(0);
-}
+
 
 export function getCount_dme(id: string): BigInt {
     let counter = Counter.load(id);
@@ -203,16 +190,20 @@ export function getGlobalData(): GlobalData | null {
         gb.totalRegularTreeSellAmount = new BigInt(0);
         gb.totalAuctionTreeSellAmount = new BigInt(0);
         gb.totalIncrementalSellAmount = new BigInt(0);
-        gb.totalClaimedGiftTrees = new BigInt(0);
+        gb.claimedCommunityGiftTrees = new BigInt(0);
         gb.regularTreePrice = new BigInt(0);
         gb.lastIncrementalSold = new BigInt(0);
+        gb.lastRegularSold= new BigInt(0);
         gb.prevIncrementalPrice = new BigInt(0);
         gb.nowIncrementalPrice = new BigInt(0);
         gb.nextIncremetalPrice = new BigInt(0);
         gb.communityGiftPlanterFund = new BigInt(0);
         gb.communityGiftReferralFund = new BigInt(0);
-        gb.totalRegularRequests= new BigInt(0);
-        gb.totalIncrementalRequests= new BigInt(0);
+        gb.regularBatchBuyCount= new BigInt(0);
+        gb.incrementalBatchBuyCount= new BigInt(0);
+        gb.referrerPlanterFund= new BigInt(0);
+        gb.referrerReferralFund= new BigInt(0);
+        gb.giftPerRegularBuy= new BigInt(0);
     }
     return gb;
 

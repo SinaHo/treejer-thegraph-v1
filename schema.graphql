@@ -3,8 +3,7 @@ type Counter @entity {
   activity:BigInt
   updateSpec: BigInt
   bid: BigInt
-  RegularRequest: BigInt
-  IncrementalRequest: BigInt
+  batchBuy: BigInt
   assignedFunds: BigInt
   dme: BigInt
   planterPayments: BigInt
@@ -53,7 +52,7 @@ type Tree @entity {
   mintStatus: String
   countryCode: String
   provideStatus: BigInt
-  treeStatus: BigInt
+  treeStatus: BigIntregularTreePrice 
   plantDate: BigInt
   birthDate: BigInt
   treeUpdates: [UpdateTree!] @derivedFrom(field: "tree")
@@ -77,6 +76,7 @@ type Activity @entity {
 type Referrer @entity {
   id: ID!
   referredRegular: BigInt
+  regularUnused: BigInt
   referredAuction: BigInt
   referredBid: BigInt
   referredIncremental: BigInt
@@ -160,6 +160,7 @@ type Owner @entity {
   auctionSpent: BigInt
   incrementalSpent: BigInt
   regularSpent: BigInt
+  buyCount: BigInt
 }
 
 type TreeAttribute @entity {
@@ -288,16 +289,21 @@ type GlobalData @entity {
   totalRegularTreeSellAmount: BigInt
   totalAuctionTreeSellAmount: BigInt
   totalIncrementalSellAmount: BigInt
-  totalClaimedGiftTrees: BigInt
+  claimedCommunityGiftTrees: BigInt
   regularTreePrice: BigInt
   lastIncrementalSold: BigInt
+  lastRegularSold: BigInt
   prevIncrementalPrice: BigInt
   nowIncrementalPrice: BigInt
   nextIncremetalPrice: BigInt
   communityGiftPlanterFund: BigInt
   communityGiftReferralFund: BigInt
-  totalRegularRequests: BigInt
-  totalIncrementalRequests: BigInt
+  regularBatchBuyCount: BigInt
+  incrementalBatchBuyCount: BigInt
+  referrerPlanterFund: BigInt
+  referrerReferralFund: BigInt
+  giftPerRegularBuy: BigInt
+  claimedReferralGifts: BigInt
 }
 
 type CommunityGifts @entity {
@@ -311,19 +317,11 @@ type CommunityGifts @entity {
   transferAddress: Owner!
 }
 
-type RegularRequest @entity {
+type BatchBuy @entity {
   id: ID!
   owner: Owner!
   referrer: Referrer!
-  count: BigInt
-  amount: BigInt
-  date: BigInt
-}
-
-type IncrementalRequest @entity {
-  id: ID!
-  owner: Owner!
-  referrer: Referrer!
+  type: String
   count: BigInt
   amount: BigInt
   date: BigInt

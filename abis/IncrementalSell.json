@@ -39,6 +39,12 @@
           "internalType": "uint256",
           "name": "count",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
         }
       ],
       "name": "IncrementalTreeSold",

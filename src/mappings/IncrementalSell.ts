@@ -94,7 +94,7 @@ export function handleIncrementalTreeSold(event: IncrementalTreeSold): void {
     if (referrerAddress!= ZERO_ADDRESS){
         
         let referrer: Referrer | null =Referrer.load(referrerAddress);
-        if (!referrer) referrer=new Referrer(referrerAddress.toHexString());
+        if (!referrer) referrer=newReferrer(referrerAddress.toHexString());
         referrer.referredIncremental=referrer.referredIncremental.plus(count as BigInt);
         referrer.genesisGifts=referrer.genesisGifts.plus(count as BigInt);
         referrer.save();
@@ -107,7 +107,7 @@ export function handleIncrementalTreeSold(event: IncrementalTreeSold): void {
     activity.amount=amount as BigInt;
     activity.activityReferenceId=isr.id;
     activity.eventDate=event.block.timestamp as BigInt;
-    activity.save()
+    activity.save();
     isr.save();
     
     for (let i = parseInt(startId); i <= parseInt(startId.plus(count as BigInt)); i++) {
@@ -127,6 +127,7 @@ export function handleIncrementalTreeSold(event: IncrementalTreeSold): void {
     owner.incrementalSpent = owner.incrementalSpent.plus(amount as BigInt);
     owner.treeCount = owner.treeCount.plus(count as BigInt);
     owner.spentWeth = owner.spentWeth.plus(amount as BigInt);
+    owner.buyCount=owner.buyCount.plus(BigInt.fromI32(1));
     owner.save();
    
     gb.totalIncrementalSellCount = gb.totalIncrementalSellCount.plus(count as BigInt);

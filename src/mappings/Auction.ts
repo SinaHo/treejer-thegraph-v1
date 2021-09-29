@@ -92,7 +92,7 @@ export function handleHighestBidIncreased(event: HighestBidIncreased): void {
     activity.amount=amount as BigInt;
     activity.activityReferenceId=bid.id;
     activity.eventDate=event.block.timestamp as BigInt;
-    activity.save()
+    activity.save();
     let auction = Auction.load(auctionId.toHexString());
     auction.highestBid = amount as BigInt;
     auction.bidCount=auction.bidCount.plus(BigInt.fromI32(1));
@@ -126,6 +126,7 @@ export function handleAuctionSettled(event: AuctionSettled): void {
     owner.auctionCount=owner.auctionCount.plus(BigInt.fromI32(1));
     owner.auctionSpent = owner.auctionSpent.plus(amount as BigInt);
     owner.spentWeth = owner.spentWeth.plus(amount as BigInt);
+    owner.buyCount=owner.buyCount.plus(BigInt.fromI32(1));
     gb.totalAuctionTreeSellAmount=gb.totalAuctionTreeSellAmount.plus(amount as BigInt);
     gb.totalAuctionTreeSellCount=gb.totalAuctionTreeSellCount.plus(BigInt.fromI32(1));
     let tree = Tree.load(treeId.toHexString());
